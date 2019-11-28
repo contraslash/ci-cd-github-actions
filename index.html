@@ -33,7 +33,114 @@ class: center
 [https://github.com/contraslash/ci-cd-github-actions](https://github.com/contraslash/ci-cd-github-actions)
 ![Qr code](img/qr.png)
 ---
+# Historia
 
+- Metodologías tradicionales
+- Manifiesto ágil
+- Calidad del software
+
+---
+[https://blog.toggl.com/mars-software-development/](https://24t9d72kcs873my15o9hr1pu-wpengine.netdna-ssl.com/wp-content/uploads/2019/10/software-development-methods-mars-toggl.jpg)
+    ![https://blog.toggl.com/mars-software-development/](https://24t9d72kcs873my15o9hr1pu-wpengine.netdna-ssl.com/wp-content/uploads/2019/10/software-development-methods-mars-toggl.jpg)
+---
+class: center
+    ### El proceso de garantía de calidad del software, embebido en metodologías tradicionales desde etapas tempranas debía evolucionar en conjunto con los procesos iterativos y ágiles de desarrollo
+---
+class: center
+# Devops
+
+![https://www.suse.com/es-es/solutions/devops/](https://www.suse.com/assets/img/devops-process.png)
+---
+# Formalidad de las pruebas (INVEST)
+
+- Independientes
+- Negociables
+- Valiosas
+- Estimables
+- Pequeñas (Small en Inglés)
+- Probables (Testables en Inglés)
+---
+# Categorías de Pruebas
+
+- Análisis estático:
+  - Análisis de sintaxis
+  - Análisis de vulnerabilidades de dependencias
+  - Análisis de complejidad
+  -  Análisis de ortografía
+- Análisis unitario:
+  - Pruebas unitarias
+  - Cobertura máxima de caminos
+- Análisis funcional:
+  - Particiones de equivalencia
+  - Análisis de valores límite
+- Análisis no funcional:
+  - Análisis de seguridad
+  - Análisis de rendimiento
+  - Análisis de carga
+  - Análisis de usabilidad
+---
+# Operaciones
+
+- Infraestructura inmutable
+- Artefactos
+- Baúl de secretos
+---
+# Github Actions
+
+```yaml
+
+name: Hola Mundo
+on:
+  push:
+    branches:
+    - master
+jobs:
+  hola_mundo:
+    name: Hola mundo con github actions
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: echo "Hola ${NOMBRE}"
+    env:
+    - NOMBRE: ${{ secrets.NOMBRE }}
+```
+---
+[https://github.com/ma0c/ci-cd-github-actions-js](https://github.com/ma0c/ci-cd-github-actions-js)
+
+```
+name: CI/CD
+
+on:
+  push:
+    branches:
+    - master
+jobs:
+  test:
+    name: Dummy test using yarn test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+    - run: yarn install
+    - run: yarn test a
+    env:
+      CI: true
+   build:
+    name: Dummy storage using aws sync
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+    - uses: actions/checkout@v1
+    - run: |
+        yarn install
+        yarn build
+    - run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set region us-east-1
+        aws configure set output json
+        aws s3 sync build s3://ci-cd-github-actions-js.contraslash.com
+```
 ---
 Dar las gracias y huir
 ![https://media.giphy.com/media/3o7ZetIsjtbkgNE1I4/giphy.gif](https://media.giphy.com/media/3o7ZetIsjtbkgNE1I4/giphy.gif)
